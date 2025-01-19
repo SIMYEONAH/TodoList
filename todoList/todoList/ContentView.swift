@@ -19,13 +19,15 @@ struct ContentView: View {
         NavigationStack {
             List {
                 ForEach(toDos) { toDo in
-                    Button {
-                        toDo.isCompleted.toggle()
-                    } label: {
-                        Image(systemName: toDo.isCompleted ?  "checkmark.circle.fill" : "circle")
+                    HStack {
+                        Button {
+                            toDo.isCompleted.toggle()
+                        } label: {
+                            Image(systemName: toDo.isCompleted ? "checkmark.circle.fill" : "circle")
+                        }
+                        
+                        Text(toDo.title)
                     }
-                    
-                    Text(toDo.title)
                 }
                 .onDelete(perform: deleteToDos)
             }
@@ -42,8 +44,15 @@ struct ContentView: View {
                 
                 Button{
                     modelContext.insert(ToDo(title: toDoTitle, isCompleted: false))
+                    toDoTitle = ""
                 } label: {
                     Text("Add")
+                }
+                
+            }
+            .overlay {
+                if toDos.isEmpty {
+                    ContentUnavailableView("Noting to do yet.", systemImage: "checkmark.circle.fill")
                 }
             }
         }
